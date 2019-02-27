@@ -1,5 +1,7 @@
 <template>
   <div id="app">
+    <PieChart :strdata='dataStuff'></PieChart>
+    <button @click="changeData">button</button>
   </div>
 </template>
 
@@ -12,16 +14,29 @@ import PieChart from './components/PieChart.vue';
     PieChart
   },
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  dataStuff = [{"x":"Germany","y":12},{"x":"United States","y":14},{"x":"France","y":19},{"x":"United Kingdom","y":22},{"x":"Spain","y":16},{"x":"Italy","y":11}];  
+
+
+  randomNumber() {
+    return Math.floor(Math.random() * 40000) + 10000;
+  }
+
+  changeData() {
+    const newData = this.dataStuff.map(item => {
+       item.y = this.randomNumber();
+       return item;
+    });
+
+    this.dataStuff = [...newData];
+
+  }
+}
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+/* You can add global styles to this file, and also import other style files */
+
+
+
 </style>
