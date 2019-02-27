@@ -1,37 +1,44 @@
 <template>
   <div style="height: 1000px; width: 1000px; margin: 0 auto;">
     <div id="propID" style="width:100%; height: 100%" class="piechart-wrapper"> </div>
+    {{dataModel}}
+    {{colors}}
   </div>
-  
 </template>
 <script>
-import { Component, Vue, Watch } from 'vue-property-decorator';
+import { Component, Vue, Watch, Prop } from 'vue-property-decorator';
 import * as d3 from 'd3';
+import wrap from '@vue/web-component-wrapper';
 
 @Component({
   props: {
-      strdata: Array
+    strdata: String
   }
 })
 export default class PieChart extends Vue {
-    
+
+  data() {
+    return {
+      total: 0,
+      colors: ['#081A4E', '#092369','#1A649F','#2485B4','#2DA8C9','#5DC1D0','#9AD5CD','#D5E9CB'],
+      savedColors: {},
+      donutWidth:  0,
+    }
+  };
+
+
   get dataModel() {
-  // let data = JSON.parse(this.strdata);
-  // return this.data.map(item=>{
-    return this.strdata.map(item=>{
-      return {value: item.y, label: item.x}
+    let data = JSON.parse(this.strdata);
+    return data.map(item=>{
+        return {value: item.y, label: item.x}
     })
   }
-  total = 0;
-  colors = ['#081A4E', '#092369','#1A649F','#2485B4','#2DA8C9','#5DC1D0','#9AD5CD','#D5E9CB'];
-  savedColors = {};
-  donutWidth =  0;
 
   mounted() {
-    this.drawPieChart()
+    setTimeout(()=>{this.drawPieChart()}, 3000);
   }
+
   drawPieChart() {
-      
         if (this.total === 0 && this.dataModel) {
           this.dataModel.forEach(el => {this.total += el['value']})
         }
@@ -52,8 +59,8 @@ export default class PieChart extends Vue {
         }
 
         var margin = {top: 0, right: 0, bottom: 0, left: 0},
-          width = element2.clientWidth - margin.left - margin.right,
-          height = element2.clientHeight - margin.top - margin.bottom,
+          width = (element2.clientWidth === 0 ? 500 : element2.clientWidth )- margin.left - margin.right,
+          height = ( element2.clientHeight === 0 ? 500 : element2.clientHeight)- margin.top - margin.bottom,
           radius = height > width ?  width / 2 : height / 2;
 
         var svg = d3.select(element2)
@@ -141,7 +148,7 @@ export default class PieChart extends Vue {
           })
 
 
-        var colors = this.colors
+        var colors = localThis.colors
 
         // add colors to each slice
         arcs.append("path")
@@ -237,13 +244,17 @@ export default class PieChart extends Vue {
               })
             })
         }
-     }
+  }
   
-  @Watch('strdata', {immediate: true, deep:true})
+  @Watch('strdata', {deep:true})
   onpropchanged(){
     this.drawPieChart();
   }
 }
+
+const CustomElement = wrap(Vue, PieChart);
+window.customElements.define('jscat-pie-chart-cmon', CustomElement);
+
 </script>
 <style>
 h2 {
