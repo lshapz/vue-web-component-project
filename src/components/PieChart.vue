@@ -1,8 +1,6 @@
 <template>
   <div style="height: 1000px; width: 1000px; margin: 0 auto;">
     <div id="propID" style="width:100%; height: 100%" class="piechart-wrapper"> </div>
-    {{dataModel}}
-    {{colors}}
   </div>
 </template>
 <script>
@@ -252,8 +250,8 @@ export default class PieChart extends Vue {
   }
 }
 
-const CustomElement = wrap(Vue, PieChart);
-window.customElements.define('jscat-pie-chart-cmon', CustomElement);
+// const CustomElement = wrap(Vue, PieChart);
+// window.customElements.define('jscat-pie-chart-cmon', CustomElement);
 
 </script>
 <style>

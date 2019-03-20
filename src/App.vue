@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <PieChart :strdata='dataStuff'></PieChart>
+
+    <VueCounter></VueCounter>
+    <PieChart :strdata='strdata'></PieChart>
     <button @click="changeData">button</button>
   </div>
 </template>
@@ -8,10 +10,12 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import PieChart from './components/PieChart.vue';
+import VueCounter from './components/VueCounter.vue';
 
 @Component({
   components: {
-    PieChart
+    PieChart,
+    VueCounter
   },
 })
 export default class App extends Vue {
@@ -30,6 +34,10 @@ export default class App extends Vue {
 
     this.dataStuff = [...newData];
 
+  }
+
+  get strdata () {
+    return JSON.stringify(this.dataStuff)
   }
 }
 </script>
